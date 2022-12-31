@@ -1,0 +1,83 @@
+html {
+    height: 100%;
+  }
+  body {
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+    background: rgba(0,0,0);
+  }
+
+  .bg-img {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    position: relative;
+  }
+  
+  .bg-img::before {
+    content: "";
+    background: url("icon.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;   
+    opacity: 0.3;
+  }
+  
+  .form-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 275px;
+    padding: 40px;
+    transform: translate(-50%, -50%)
+  }
+  
+  .form-box h2 {
+    margin: 0 0 12px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+  }
+
+  input[type=text] {
+    width: 100%;
+    padding: 12px 12px;
+    display: inline-block;
+    border: 2px solid #ccc;
+    background: transparent;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: white;
+    text-align: center;
+  }
+  input[type=text]:focus {
+    outline: none !important;
+    border: 2px solid #e91e63;
+  }
+
+  ::placeholder {
+    text-align: center; 
+ }  
+
+ input[type=submit] {
+  outline: none !important;
+  width: 100%;
+  background-color: #e91e63;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  opacity: 0.5;
+}
+input[type=submit]:focus, input[type=submit]:not([disabled]):hover{
+  opacity: 1;
+  cursor: pointer;
+}
+ 

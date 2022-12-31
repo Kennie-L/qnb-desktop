@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>Qiqi's Notebook</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div class="bg-img">
+    <div class="form-box">
+      <h2>Start Route</h2>
+      <form>
+        <input type="text" id="rid" name="routeId" placeholder="Route ID" autofocus>
+        <input type="submit" value="Submit" id="submitBtn" disabled>
+      </form>
+    </div>
+  </div>
+</body>
+<script src="index.js" defer></script>
+</html>
