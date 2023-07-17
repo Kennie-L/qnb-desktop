@@ -1,52 +1,59 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, Menu, dialog, shell } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  ipcMain,
+  Menu,
+  dialog,
+  shell,
+} = require("electron");
 
-const path = require('path');
+const path = require("path");
 const qnbURL = "https://qiqis-notebook.com";
 
-const iconPath = process.platform !== 'darwin'
-  ? 'favicon.ico'
-  : 'favicon.icns';
+const iconPath = process.platform !== "darwin" ? "favicon.ico" : "favicon.icns";
 
 const template = [
   {
-    role: 'window',
+    role: "window",
     label: "Application",
     submenu: [
       {
-        label: 'Reload',
-        role: 'reload'
+        label: "Reload",
+        role: "reload",
       },
-      { label: "Restart",
+      {
+        label: "Restart",
         click: () => {
           app.relaunch({ execPath: process.env.PORTABLE_EXECUTABLE_FILE });
           app.quit();
-        }
+        },
       },
       {
-        type: 'separator',
+        type: "separator",
       },
       {
-        label: 'Quit',
+        label: "Quit",
         click: () => {
           app.quit();
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
   {
-    role: 'window',
+    role: "window",
     label: "Community",
     submenu: [
       {
-        label: 'Discord',
+        label: "Discord",
         click: () => {
           shell.openExternal("https://discord.gg/xyddRPYSdD");
-        }
-      }
-    ]
-  }
-]
-const menu = Menu.buildFromTemplate(template)
+        },
+      },
+    ],
+  },
+];
+const menu = Menu.buildFromTemplate(template);
 
 let win;
 
@@ -60,13 +67,12 @@ function createWindow() {
     resizable: false,
     backgroundColor: "#000",
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, "preload.js"),
     },
-    icon: path.join(__dirname, iconPath)
+    icon: path.join(__dirname, iconPath),
   });
-
   win.removeMenu();
-  win.loadFile('index.html');
+  win.loadFile("index.html");
 }
 
 // This method will be called when Electron has finished
@@ -79,27 +85,27 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
 
 // Unregister all shortcuts on exit
-app.on('will-quit', () => {
-  globalShortcut.unregisterAll()
-})
+app.on("will-quit", () => {
+  globalShortcut.unregisterAll();
+});
 
-ipcMain.handle('open-window', (event, args) => {
-
+ipcMain.handle("open-window", (event, args) => {
   // Load route viewer
-  win.loadURL(`${qnbURL}/map/route-viewer/${args.url}?window=true`)
+  win
+    .loadURL(`${qnbURL}/embed/route/${args.url}`)
     .then(() => {
       // Set window properties for always on top
       win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
@@ -110,31 +116,34 @@ ipcMain.handle('open-window', (event, args) => {
 
       // Show window
       win.show();
+
+      // Register shortcuts
+      globalShortcut.register("Alt+Left", () => {
+        console.log("Left"); // Somehow improves the execution time of this function, likely due to timing, event loop or other factors, needs more investigation
+        win.webContents.executeJavaScript(
+          `document.getElementById("route-prev").click()`
+        );
+      });
+      globalShortcut.register("Alt+Shift+Left", () => {
+        console.log("Left");
+        win.webContents.executeJavaScript(
+          `document.getElementById("route-prev").click()`
+        );
+      });
+      globalShortcut.register("Alt+Right", () => {
+        console.log("Right");
+        win.webContents.executeJavaScript(
+          `document.getElementById("route-next").click()`
+        );
+      });
+      globalShortcut.register("Alt+Shift+Right", () => {
+        console.log("Right");
+        win.webContents.executeJavaScript(
+          `document.getElementById("route-next").click()`
+        );
+      });
     })
     .catch(() => {
-      dialog.showErrorBox("Unable to open route", "Check if the route ID is valid.");
+      dialog.showMessageBox(null, "Unable to open route");
     });
-
-  // Re-open home page on redirect for invalid routes
-  win.webContents.on("will-redirect", (event) => {
-    event.preventDefault();
-    win.loadFile('index.html');
-    win.setAlwaysOnTop(false);
-    win.setMinimizable(true);
-
-    // Un-register all shortcuts
-    globalShortcut.unregisterAll();
-  })
-
-  // Register shortcuts
-  globalShortcut.register('Alt+Left', () => {
-    win.webContents.executeJavaScript(`
-      document.getElementById("route-prev").click()
-    `);
-  })
-  globalShortcut.register('Alt+Right', () => {
-    win.webContents.executeJavaScript(`
-      document.getElementById("route-next").click()
-    `);
-  })
-})
+});

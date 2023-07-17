@@ -1,6 +1,6 @@
 {
   "name": "qnb-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An 'always on top' route viewer for Qiqi's Notebook",
   "main": "electron.js",
   "scripts": {
