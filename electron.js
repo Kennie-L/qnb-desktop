@@ -52,6 +52,31 @@ const template = [
       },
     ],
   },
+  {
+    role: "window",
+    label: "Help",
+    submenu: [
+      {
+        label: "Info",
+        click: () => {
+          dialog.showMessageBox(win, {
+            title: "Controls",
+            message:
+              "Alt + Left arrow for Previous and Alt + Right arrow for Next",
+            type: "info",
+          });
+        },
+      },
+      {
+        label: "Updates",
+        click: () => {
+          shell.openExternal(
+            "https://github.com/Kennie-L/qnb-desktop/releases"
+          );
+        },
+      },
+    ],
+  },
 ];
 const menu = Menu.buildFromTemplate(template);
 
@@ -144,6 +169,6 @@ ipcMain.handle("open-window", (event, args) => {
       });
     })
     .catch(() => {
-      dialog.showMessageBox(null, "Unable to open route");
+      dialog.showMessageBox(win, "Unable to open route");
     });
 });
