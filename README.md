@@ -3,6 +3,11 @@
   <img src="icon.png" />
 </p>
 
+## Note
+> This project is depreciated and has been replaced by a new project [here](https://github.com/Qiqis-Notebook/qnb-client) 
+
+
+## About
 A simple application to launch Route Viewer as a mini 'always on top' window to see and control the route map while playing Genshin in windowed mode.
 
 
